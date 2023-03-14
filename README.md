@@ -39,7 +39,6 @@
         <td align="center">
             <a href="https://github.com/lectura7942">:octocat: GitHub</a>
             <br />
-            <a href="./lectura7942">:memo: 푼 문제들</a>
         </td>
         <td align="center">
             <a href="https://github.com/JLake310">:octocat: GitHub</a>
