@@ -4,14 +4,19 @@ data = list(map(int, input().split()))
 
 #code
 
-data.sort(reverse = True)
+data.sort()
 
-count = 0
-while len(data) != 0:
-    for i in range(data[0]-1) :
-        data.pop()
-    del data[0]
-    count += 1
+#몇 명의 모험가는 마을에 그대로 남아 있어도 되는 조건을 고려하지 못함
 
-print(count)
+temp = [] #임의의 한 그룹
+result = 0 # 총 그룹 수
+
+for i in data:
+    temp.append(i)
+
+    if max(temp) <= len(temp):
+        result += 1
+        temp = []
+
+print(result)
 

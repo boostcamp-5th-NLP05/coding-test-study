@@ -4,9 +4,10 @@ data = input()
 
 result = 0
 for i in data:
-    if i != '0' and result !=0 :
-        result = result*int(i)
+    i = int(i)
+    if i == 0 or i == 1 or result == 0 or result == 1 :
+        result += i
     else :
-        result += int(i)
+        result = result * i
 print(result)
 
