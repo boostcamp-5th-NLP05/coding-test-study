@@ -14,7 +14,7 @@ if __name__=='__main__':
     
     answer = 1                                  # 시작점도 방문 횟수에 포함
     while True:
-        game_map[cur_row][cur_col] = 1          # 한 번 방문한 지점은 방문 못하기 때문에 바다로 만들어 버린다
+        game_map[cur_row][cur_col] = 2          # 한 번 방문한 지점은 방문 못하기 때문에 바다로 만들어 버린다 => 2로 만든다
         turn_cnt = 0
         while turn_cnt <= 4:                    # 4번 돌면 뒤로 가야하기 때문에 반복문 사용
             turn_cnt += 1
@@ -26,7 +26,7 @@ if __name__=='__main__':
             if next_row < 0 or next_row > 7 or next_col < 0 or next_col > 7:
                 continue
             
-            if game_map[next_row][next_col] == 1:
+            if game_map[next_row][next_col] != 0:
                 continue
 
             # 여기까지 실행이 됐다는건 조건에 부합하다는 것. 현재 위치 업데이트하고 turn_cnt 반복문 종료
