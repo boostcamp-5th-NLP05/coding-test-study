@@ -23,7 +23,7 @@ if __name__ == "__main__":
             next_col = cur_col + dc[cur_dir]
 
             # 다음으로 갈 지점이 조건에 부합한 지 확인. 부합하지 않으면 다음 회전으로 넘어가기
-            if next_row < 0 or next_row > 7 or next_col < 0 or next_col > 7:
+            if next_row < 0 or next_row >= N or next_col < 0 or next_col >= M:
                 continue
 
             if game_map[next_row][next_col] != 0:
@@ -41,7 +41,7 @@ if __name__ == "__main__":
             next_col = cur_col - dc[cur_dir]
 
             # 뒤로 가는 지점이 조건에 부합한지 확인
-            if next_row < 0 or next_row > 7 or next_col < 0 or next_col > 7:
+            if next_row < 0 or next_row >= N or next_col < 0 or next_col >= M:
                 break
 
             if game_map[next_row][next_col] == 1:
