@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 
 def rotation(data): #90도 회전함수
     new_data = [[0 for _ in range(len(data))] for _ in range(len(data))]
@@ -8,14 +9,11 @@ def rotation(data): #90도 회전함수
     return new_data
 
 def check(key, lock , new_lock, j, k, m): #열 수 있는지 여부를 알아내는 함수
-    new_lock_temp = new_lock.copy()
+    new_lock_temp = copy.deepcopy(new_lock)
     for i in range(len(key)):
         for w in range(len(key)):
             new_lock_temp[j+i,k+w] = key[i][w] + lock[i][w] 
-    print(new_lock_temp[m-1:len(new_lock)-m+1,m-1:len(new_lock)-m+1])
-    print('-------------')
-    print(np.array([[1 for _ in range(len(new_lock)-2*(m-1))] for _ in range(len(new_lock)-2*(m-1))]))
-    if np.array_equal(new_lock_temp[m-1:m-1,len(new_lock)-m+1:len(new_lock)-m+1], np.array([[1 for _ in range(len(new_lock)-2*(m-1))] for _ in range(len(new_lock)-2*(m-1))])):
+    if np.array_equal(new_lock_temp[m-1:len(new_lock)-m+1,m-1:len(new_lock)-m+1], np.array([[1 for _ in range(len(new_lock)-2*(m-1))] for _ in range(len(new_lock)-2*(m-1))])): #print에만 적용했었음.. 잘 확인하기!
         return True
     return False
 
@@ -35,8 +33,7 @@ def solution(key, lock):
         for j in range(len(new_lock)-m+1): #오른쪽, 아래쪽으로 한칸씩 이동하면서 check
             for k in range(len(new_lock)-m+1):
                 print(check(key, new_lock[j:j+m,k:k+m], new_lock, j,k , m))
-                if check(key, new_lock[j:j+m,k:k+m], new_lock, j,k , m) == True:
-                    
+                if check(key, new_lock[j:j+m,k:k+m], new_lock, j,k , m):
                     return answer
         key = rotation(key)
                       
