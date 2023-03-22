@@ -47,8 +47,8 @@ def solution(key, lock):
                 # 패딩을 제외한 중간의 lock 부분의 값들만 리스트로 만들기
                 val_list = [
                     map_copy[i][j]
-                    for i in range(M + 1, M + 1 + N)
-                    for j in range(M + 1, M + 1 + N)
+                    for i in range(M, M + N)
+                    for j in range(M, M + N)
                 ]
 
                 # 0은 lock에서 채워지지 않은 공간
