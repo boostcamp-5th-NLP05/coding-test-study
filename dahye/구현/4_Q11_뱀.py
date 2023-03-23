@@ -22,7 +22,7 @@ for l in range(L):
 #게임시작으로부터 num초뒤 바뀌는 방향이 dir이므로 step으로 취급하기 위해 빼줌
 for nn in range(len(num_list)-1,0,-1):
     num_list[nn] = num_list[nn]-num_list[nn-1]
-
+num_list.append(N) #방향을 틀고 최대 N만큼 더 가서 벽에 부딫힐 수 있음
 for num in range(len(num_list)):    
     dir = dir_list[num]
     for n in range(num_list[num]):
