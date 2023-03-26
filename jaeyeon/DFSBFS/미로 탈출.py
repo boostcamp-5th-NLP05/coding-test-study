@@ -18,7 +18,7 @@ if __name__ == "__main__":
             continue
         
         # 현재 방문한 지점의 값이 1이라면 처음 방문하는 지점이므로 현재의 depth로 업데이트
-        if map_[cur_r][cur_c] == 1:
+        if map_[cur_r][cur_c] == 1 and cur_r != 0 and cur_c != 0:
             map_[cur_r][cur_c] = cur_depth
 
         for r, c in zip(dr, dc):
