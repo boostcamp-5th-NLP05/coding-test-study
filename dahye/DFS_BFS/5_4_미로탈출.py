@@ -1,34 +1,28 @@
+from collections import deque
 n, m = map(int, input().split())
 data = []
 for _ in range(n):
     data.append(list(map(int, input())))
 
-#dfs를 정의내린 이유 -> 미로 탈출할 때까지 재귀함수 사용하기 위해
+result = 0
+def bfs(x,y) :
+    queue = deque([0,0])
+    while queue:
+        i, j = queue.popleft()
+        for di, dj in [-1, 0], [1, 0], [0, -1], [0, 1]: #다음 step 확인
+            ni, nj = i + di, y + dj
 
-def dfs(x,y) :
-    if x>=n or x<0 or y>=m or y<0: #범위넘어가면 멈춤
-        return 'nope'    
-    if data[x][y] == 1: #1이면 상하좌우로 이동
-        data[x][y] = 0 # 방문처리
-        dfs(x+1,y)
-        dfs(x-1,y)
-        dfs(x,y+1)
-        dfs(x,y-1)
-        return 'go'
-    if x == n and y == m:
-        return 'stop'
-    return 'nope'
+            if ni>=n or ni<0 or nj>=m or nj<0: #범위넘어가면 다른 경우로
+                return ''
+            if data[ni][nj] == 0: #괴물이 있으면 다른 경우로
+                return ''
+            if data[ni][nj] == 1: #지름길이면 원래 거리count에 1더해줌
+                queue.append([ni,nj]) 
+                data[ni][nj] = data[i][j] + 1
+        return queue[-1]
 
-count = 0
-temp_break = 'nb'
-for i in range(n):
-    for j in range(m):
-        if dfs(i,j) == 'go':
-            count +=1
-        elif dfs(i,j) == 'stop':
-            temp_break = 'b'
-            break
+            
         
-    if temp_break == 'b':
-        break
-print(count)
+
+        
+print(bfs(0,0))
