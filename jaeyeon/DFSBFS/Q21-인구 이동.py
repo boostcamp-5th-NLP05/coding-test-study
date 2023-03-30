@@ -55,9 +55,7 @@ if __name__ == "__main__":
 
                     # while문이 끝나면 한 연합을 모두 찾은 것이므로 union list에 추가
                     union_list.append([union_sum, union_cnt])
-        print(f'Day {answer}')
-        for row in union_map:
-            print(row)
+       
         # 연합의 개수가 나라의 개수와 같다면 하나도 연합이 이뤄지지 않은 것
         if union_number == N * N - 1:
             break
@@ -68,10 +66,7 @@ if __name__ == "__main__":
             for c in range(N):
                 union_sum, union_cnt = union_list[union_map[r][c]]
                 map_[r][c] = union_sum // union_cnt
-        print("map_")
-        for row in map_:
-            print(row)
-        print("==========")
+       
         
     print(answer)
 
