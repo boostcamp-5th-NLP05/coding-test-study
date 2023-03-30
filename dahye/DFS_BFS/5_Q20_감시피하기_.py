@@ -69,9 +69,9 @@ def solution(n,data,teacher) :
 
         
         for i,j in teacher: #선생님 만나면 탐지 시작
-            if check(i,j,temp_data,n) == True: #만난 선생님이 있다면
-                return 'NO'
+            if check(i,j,temp_data,n) == False: #만난 선생님이 없다면
+                return 'YES'
 
 
-    return 'YES' #감시 안받음
+    return 'NO' #감시 받음
 print(solution(n,data,teacher))
