@@ -48,6 +48,7 @@ def population_move_dfs(row, col, visited):
             if nr < 0 or nr >= N or nc < 0 or nc >= N:
                 continue
 
+            # 인구 차이
             population_gab = abs(countries[nr][nc] - countries[r][c])
 
             # 규칙에 부합한다면 이동을 한다.
