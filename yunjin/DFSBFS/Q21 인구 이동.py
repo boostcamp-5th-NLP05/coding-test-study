@@ -31,14 +31,14 @@ def is_population_all_same(arr):
 
 
 # 인구 이동을 진행하고 인구 이동이 있었는지 확인하는 DFS 함수
-def population_move_dfs(row, col, depth, sum_number, visited):
+def population_move_dfs(row, col, visited):
     stack = []
-    stack.append((row, col, depth, sum_number))
+    stack.append((row, col))
     move_contries = set()
     visited[row][col] = True
 
     while stack:
-        r, c, d, sn = stack.pop()
+        r, c = stack.pop()
         move_contries.add((r, c))
 
         for i in range(4):
@@ -52,7 +52,7 @@ def population_move_dfs(row, col, depth, sum_number, visited):
 
             # 규칙에 부합한다면 이동을 한다.
             if not visited[nr][nc] and (L <= population_gab and population_gab <= R):
-                stack.append((nr, nc, d + 1, sn + countries[nr][nc]))
+                stack.append((nr, nc))
                 visited[nr][nc] = True
                 move_contries.add((nr, nc))
 
@@ -81,7 +81,7 @@ while True:
 
     # 모두 인구 수가 같다면 인구 이동은 없다.
     if is_population_all_same(countries):
-        break 
+        break
 
     visited = [[False for c in range(N)] for r in range(N)]
 
@@ -89,7 +89,7 @@ while True:
     for r in range(N):
         for c in range(N):
             if not visited[r][c]:
-                if population_move_dfs(r, c, 0, countries[r][c], visited): # 이동이 있었다면 while 문 계속 진행
+                if population_move_dfs(r, c, visited): # 이동이 있었다면 while 문 계속 진행
                     is_updated = True
 
     # 한 번도 이동이 없었다면
