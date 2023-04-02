@@ -1,4 +1,5 @@
 from collections import deque
+import copy 
 
 N, L, R = map(int,input().split())
 data = []
@@ -20,33 +21,29 @@ def bfs(x1,y1) :
             ny = y + dy[i]
             if nx>=N or nx<0 or ny>=N or ny<0: #범위가 아닐 때
                 continue
-
-            if abs(data[nx][ny] - data[x][y])>=L and abs(data[nx][ny] - data[x][y])<=R: #차가 범위 안이라면
+            if abs(data[nx][ny] - data[x][y])>=L and abs(data[nx][ny] - data[x][y])<=R and check_list[nx][ny] == 0: #차가 범위 안이고 아직 연합이 아닌 도시라면
                 union_list.append([nx,ny])
                 queue.append((nx,ny))
                 union_sum += data[nx][ny]
                 check_list[nx][ny] = 1
     #한 연합 결성 완료 -> 업데이트
-    print(union_list)
     for temp in union_list:
         ti,tj = temp 
-        print(ti,tj,data,union_sum)
         data[ti][tj] = union_sum//len(union_list)
 
-
-data_list = [data] #인구이동 여부 확인 list 
+data_temp = copy.deepcopy(data)
+data_list = [data_temp] #인구이동 여부 확인 list 
 count = 0
 while True: 
     check_list = [[0 for _ in range(N)] for _ in range(N)] #모든 연합을 한번에 업데이트 해야하므로 연합에 들어갔는지 확인하는 list
-    print('check')
-    print(check_list)
     for i in range(N): 
         for j in range(N):
             if check_list[i][j] == 0: 
                 bfs(i,j) #연합만들기
-
-    data_list.append(data)
+    data_temp = copy.deepcopy(data)
     print(data_list)
+
+    data_list.append(data_temp)
     if data_list[-1] == data_list[-2] : #인구이동이 없을 때
         break
     # if count == 12:
