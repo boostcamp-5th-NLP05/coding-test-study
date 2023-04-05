@@ -17,3 +17,5 @@ for position in postions:
 
 r.sort(key=lambda x: (x[0], x[1]))
 print(min(r)[1])
+
+# 백준 정답, 메모리 : 75684 KB, 시간 : 336ms
