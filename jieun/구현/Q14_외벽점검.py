@@ -1,5 +1,5 @@
 import itertools
-
+##
 
 def solution(n, weak, dist):
     answer = 100 # 답이 될 수 없는 값으로 초기화
