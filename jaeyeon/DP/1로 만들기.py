@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     # num: 숫자, count: 그 번호까지 도달하기 위한 최소 연산 횟수
     for num, count in enumerate(dp):
-        if num == 26:
+        if num == N:
             break
 
         if num == 0:
