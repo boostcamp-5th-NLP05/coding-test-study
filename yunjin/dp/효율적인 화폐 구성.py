@@ -12,7 +12,7 @@ for money in moneys:
 for i in range(max(moneys) + 1, M + 1):
     x = float('inf')
 
-    # 모든 화폐 단위에 대해서 최솟값을 찾는다.
+    # 모든 화폐 단위에 대해서 최솟값을 갱신해나간다.
     for money in moneys:
         if dp[i - money] != -1:  # 화폐 단위 하나만 추가할 수 있다면
             x = min(x, dp[i - money])  # 대소비교를 해준다
