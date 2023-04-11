@@ -1,6 +1,5 @@
 N, M = map(int, input().split())
 moneys = [int(input()) for i in range(N)]
-moneys.sort(reverse=True)  # 큰 화폐단위 부터 체크하기 위함.
 
 # 최초에 -1 로 초기화
 dp = [-1 for i in range(100001)]  #
@@ -14,7 +13,7 @@ for i in range(max(moneys) + 1, M + 1):
     x = float('inf')
 
     # 모든 화폐 단위에 대해서 최솟값을 찾는다.
-    for money in moneys:  # 큰 화폐 단위부터 확인해서
+    for money in moneys:
         if dp[i - money] != -1:  # 화폐 단위 하나만 추가할 수 있다면
             x = min(x, dp[i - money])  # 대소비교를 해준다
 
