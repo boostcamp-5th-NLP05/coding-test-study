@@ -14,7 +14,7 @@ for i in range(max(moneys) + 1, M + 1):
 
     # 모든 화폐 단위에 대해서 최솟값을 갱신해나간다.
     for money in moneys:
-        if dp[i - money] != -1:  # 화폐 단위 하나만 추가할 수 있다면
+        if dp[i - money] != -1:  # 화폐단위 하나만 추가해서 만들 수 있는 것에 대해서만
             x = min(x, dp[i - money])  # 대소비교를 해준다
 
     if x != float('inf'):  # 값이 갱신 되었다면
