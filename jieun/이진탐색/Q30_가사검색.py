@@ -1,92 +1,71 @@
-def lower_bound(query: str, char_len: int, symb_len: int, words):
-    q = query[:char_len]
-    lo = -1
-    hi = len(words)
-    while lo + 1 < hi:
-        mid = (lo + hi) // 2
-        # mid >= target FFFTTT
-        if words[mid][:char_len] > q or (
-            words[mid][:char_len] == q and len(words[mid]) - char_len >= symb_len
-        ):
-            hi = mid
-        else:
-            lo = mid
-    return hi
+from collections import defaultdict
+# Trie 코드 참고: https://m.blog.naver.com/cjsencks/221740232900
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.cnt = defaultdict(int) # cnt[len]: 남은 길이가 len인 단어 개수
+        self.children = {}
 
-
-def upper_bound(query: str, char_len: int, symb_len: int, words):
-    q = query[:char_len]
-    lo = -1
-    hi = len(words)
-    while lo + 1 < hi:
-        mid = (lo + hi) // 2
-        # mid > target FFFTTT
-        if words[mid][:char_len] > q or (
-            words[mid][:char_len] == q and len(words[mid]) - char_len > symb_len
-        ):
-            hi = mid
-        else:
-            lo = mid
-    return hi
-
+class Trie:
+    def __init__(self):
+        self.head = Node(None)
+    
+    def insert(self, string):
+        self.head.cnt[len(string)] += 1
+        current_node = self.head
+        
+        
+        for idx, char in enumerate(string):
+            if char not in current_node.children:
+                current_node.children[char] = Node(char)
+            current_node = current_node.children[char]
+            current_node.cnt[len(string) - idx - 1] += 1
+        
+    def search(self, prefix, symb_len):
+        # query: prefix + "?"" symb_len개
+        # prefix 끝 노드에서 남은 길이가 symb_len인 단어 개수를 반환한다.
+        current_node = self.head
+        
+        for char in prefix:
+            if char in current_node.children:
+                current_node = current_node.children[char]
+            else: return 0
+        
+        return current_node.cnt[symb_len]
+        
 
 def find_question(query: str):
-    # aaa???
+    # query 구조: "문자열???
     lo = -1
-    hi = len(query) - 1
-    while lo + 1 < hi:
-        mid = (lo + hi) // 2
-        # is ?: FFFTTT
+    hi = len(query)-1
+    while lo+1 < hi:
+        mid = (lo+hi)//2
+        # 조건: is ? -> FFFTTT
         if query[mid] == "?":
             hi = mid
         else:
             lo = mid
     return hi
 
-
 def solution(words, queries):
     answer = []
-    cnt = dict()
-
-    backward_words = ["".join(reversed(w)) for w in words]
-    backward_words.sort()
-    words.sort()
-
-    print("words:", words)
-    print("backward_words:", backward_words)
-    print("queries:", queries)
-
+    
+    trie = Trie()
+    reverse_trie = Trie()
+    
+    for w in words:
+        trie.insert(w)
+        reverse_trie.insert("".join(reversed(w)))
+        
     for q in queries:
         if q[0] == "?":
             q = "".join(reversed(q))
-            print(f"{''.join(reversed(q))} --> {q} :", end=" ")
-            if q in cnt:
-                answer.append(cnt[q])
-            else:
-                idx = find_question(q)
-                u = upper_bound(q, idx, len(q) - idx, backward_words)
-                l = lower_bound(q, idx, len(q) - idx, backward_words)
+            idx = find_question(q)
+            res = reverse_trie.search(q[:idx], len(q) - idx)
+            answer.append(res)
         else:
-            print(q, ":", end=" ")
-            if q in cnt:
-                answer.append(cnt[q])
-            else:
-                idx = find_question(q)
-                u = upper_bound(q, idx, len(q) - idx, words)
-                l = lower_bound(q, idx, len(q) - idx, words)
-
-        print(u, l)
-        res = u - l
-        cnt[q] = res
-        answer.append(res)
+            idx = find_question(q)
+            res = trie.search(q[:idx], len(q) - idx)
+            answer.append(res)
 
     return answer
-
-
-if __name__ == "__main__":
-    words = ["frodo", "front", "frost", "frozen", "frame", "kakao"]
-    queries = ["fro??", "????o", "fr???", "fro???", "pro?"]
-    ans = [3, 2, 4, 1, 0]
-    res = solution(words, queries)
-    print(res, ans)
-    print(res == ans)
