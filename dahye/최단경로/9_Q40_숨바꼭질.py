@@ -30,12 +30,15 @@ def dijkstra(start):
 
 # 다익스트라 알고리즘 수행
 dijkstra(1)
-
-count = 0
-temp = []
+max_temp = 0
+max_idx = 0
+count = 1
 for t in range(1,n+1):
-    if distance[t] == max(distance[1:]):
+    if distance[t] > max_temp:
+        max_temp = distance[t]
+        max_idx = t
+        count = 1
+    elif distance[t] == max_temp:
         count += 1
-        temp.append(t)
 
-print(temp[0], max(distance[1:]), count)
+print(max_idx, max_temp, count)
