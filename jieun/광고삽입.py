@@ -1,102 +1,52 @@
-import copy
+# https://school.programmers.co.kr/learn/courses/30/lessons/72414
 
-class Time:
-    def __init__(self, time_str=None, hr=0, mint=0, sec=0):
-        if time_str:
-            self.time_str = time_str
-            self.h = int(time_str[:-6])
-            self.m = int(time_str[-5:-3])
-            self.s = int(time_str[-2:])
-        else:
-            self.h = int(hr)
-            self.m = int(mint)
-            self.s = int(sec)
-            self.time_str = f"{self.h:02d}:{self.m:02d}:{self.s:02d}"
-            
+# 시간 문자열을 초로 변환
+def str_to_sec(time_str):
+    t = time_str.split(":")
+    sec = int(t[0]) * 3600 + int(t[1]) * 60 + int(t[2])
+    return sec
 
-    def __str__(self):
-        return self.time_str
 
-    def __add__(self, other):
-        sec = self.s + other.s
-        c = sec / 60
-        sec %= 60
-        mint = self.m + other.m + c
-        c = mint / 60
-        mint %= 60
-        hr = self.h + other.h + c
-
-        return Time(hr=hr, mint=mint, sec=sec)
-    
-    def __sub__(self, other):
-        sec = self.s - other.s
-        c = 0
-        if sec < 0:
-            sec += 60
-            c = -1
-        mint = self.m - other.m + c
-        c = 0
-        if mint < 0:
-            mint += 60
-            c = -1
-        hr = self.h - other.h + c
-        return Time(hr=hr, mint=mint, sec=sec)
-        
-    def __ge__(self, other):
-        return  (self.h, self.m, self.s) >= (other.h, other.m, other.s)
-    
-    def __gt__(self, other):
-        return (self.h, self.m, self.s) > (other.h, other.m, other.s)
+# 초를 시간 문자열로 변환
+def sec_to_str(sec: int):
+    hr = sec // 3600
+    sec %= 3600
+    mint = sec // 60
+    sec %= 60
+    return f"{hr:02d}:{mint:02d}:{sec:02d}"
 
 
 def solution(play_time, adv_time, logs):
-    answer = Time("00:00:00")
-    answer_len = Time("00:00:00")
-    play_time = Time(play_time)
-    adv_time = Time(adv_time)
-    
-    time_logs = []
-    for log in logs:
-        tmp = log.split('-')
-        time_logs.append((Time(tmp[0]), Time(tmp[1])))
-    
-    time_logs.sort()
-    
-    start = Time("00:00:00")
-    dt = Time(sec = 1)
-    
-    while start < Time("100:00:00"):
-        # print(start)
-        end = start + adv_time
-        res = Time("00:00:00")
-        
-        for idx, (s, e) in enumerate(time_logs):
-            if e <= start: continue
-            if s >= end: break
-            
-            t = min(end, e) - max(start, s)
-            res += t
-        
-        
-        if res > answer_len: 
-            print(f"[{start},{end}] {res} {answer_len}")
-            answer_len = copy.copy(res)
-            answer = copy.copy(start)
-        start += dt
-       
-    return answer.time_str
+    play_sec = str_to_sec(play_time)
+    adv_sec = str_to_sec(adv_time)
 
-if __name__ == "__main__":
-    # play_time = "02:03:55"
-    # adv_time = "00:14:15"
-    # logs = ["01:20:15-01:45:14", "00:40:31-01:00:00", "00:25:50-00:48:29", "01:30:59-01:53:29", "01:37:44-02:02:30"]
-    # result = "01:30:59"
-    
-    play_time = "99:59:59"
-    adv_time = "25:00:00"
-    logs = ["69:59:59-89:59:59", "01:00:00-21:00:00", "79:59:59-99:59:59", "11:00:00-31:00:00"]
-    result = "01:00:00"
-    
-    my_res = solution(play_time, adv_time, logs)
-    
-    print(my_res, (result == my_res))
+    # 광고 시간이 동영상 재생 시간 보다 길면 00:00:00 반환
+    if adv_sec >= play_sec:
+        return sec_to_str(0)
+
+    # cnt[i]: 구간 [i, i+1) 의미
+    cnt = [0 for _ in range(play_sec + 1)]
+    for time_str in logs:
+        start, end = time_str.split("-")
+        start = str_to_sec(start)
+        end = str_to_sec(end)
+        cnt[start] += 1
+        cnt[end] -= 1
+
+    # cnt 누적합 구해서 각 구간마다 시청자 재생 횟수 구하기
+    for i in range(play_sec):
+        cnt[i + 1] += cnt[i]
+
+    answer_start = 0
+    answer_sec = sum(cnt[:adv_sec])  # 00:00:00에 광고를 삽입했을 때
+    res = answer_sec
+
+    for s in range(1, play_sec):
+        if s + adv_sec > play_sec:
+            break
+        res = res - cnt[s - 1] + cnt[s + adv_sec - 1] # 맨 앞 1초 제거, 뒤에 새로운 1초 추가
+        if res > answer_sec:
+            answer_sec = res
+            answer_start = s
+
+    return sec_to_str(answer_start)
