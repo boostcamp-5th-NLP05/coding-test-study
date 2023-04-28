@@ -50,7 +50,7 @@
 
 
 
-# 누적합 힌트보고 브루트포스로 푼 두번 째 풀이
+# 누적합 힌트보고 완전탐색 푼 두번 째 풀이  ---> 시간초과
 
 # def solution(play_time, adv_time, logs):
 #     answer = ''
@@ -61,8 +61,8 @@
 #     int_adv_time = 3600 * int(ha) + 60 * int(ma) + int(sa)
 #     play_arr = [0 for i in range(int_play_time + 10)]
 #
-#     # print(len(play_arr))
 #
+#     # 전체 logs 숫자 형식으로 바꿔주기
 #     def str_to_time(arr, check):
 #
 #         for log in arr:
@@ -74,15 +74,6 @@
 #             for i in range(int_s, int_e):
 #                 check[i] += 1
 #
-#     def str_to_time_one(st, check):
-#
-#         s, e = st.split('-')
-#         h1, m1, s1 = s.split(':')
-#         h2, m2, s2 = e.split(':')
-#         int_s = 3600 * int(h1) + 60 * int(m1) + int(s1)
-#         int_e = 3600 * int(h2) + 60 * int(m2) + int(s2)
-#
-#         return int_s, int_e
 #
 #     str_to_time(logs, play_arr)
 #
@@ -90,6 +81,8 @@
 #     u = len(play_arr) - int_adv_time
 #     prev = sum(play_arr[:int_adv_time])
 #     m = prev
+#
+#     # 최대 구간 구하기.
 #     for i in range(1, u):
 #         s = prev - play_arr[i] + play_arr[i + int_adv_time]
 #
@@ -99,7 +92,6 @@
 #
 #         prev = s
 #
-#     print(result)
 #     if result == 0:
 #         answer = '00:00:00'
 #     else:
