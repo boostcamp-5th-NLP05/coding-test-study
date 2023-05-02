@@ -16,7 +16,7 @@ graph=[[] for i in range(N+1)]
 for n in range(1, N+1):
     temp = list(map(int,input().split()))
     course[n] = temp[0]
-    for t in temp[1:-2]:
+    for t in temp[1:-1]:
         graph[t].append(n) # graph[t]는 t번째 강의를 듣기위해 선이수를 해야하는 강의들
         indegree[n] += 1 #진입 차수를 1 증가
 
