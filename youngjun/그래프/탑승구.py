@@ -10,14 +10,14 @@ air = []
 for i in range(p): 
     air.append(int(input()))
 
-def find(parent, x):
-    while parent[x] != x:
-        x = parent[x]
+def find_union(parent,x):
+    if parent[x] != x:
+        parent[x] = find_union(parent,parent[x])
     return parent[x]
 
 def union(parent,a,b):
-    a = find(parent,a)
-    b = find(parent,b)
+    a = find_union(parent,a)
+    b = find_union(parent,b)
     
     if a < b:
         parent[b] = a
@@ -30,7 +30,7 @@ port = [0 for _ in range(g+1)] #탑승구에 들어와있는 지 보는 리스�
 answer = 0
 
 for i in air:
-    tmp = find(parent,i) #현재 들어갈 수 있는 제일 번호가 큰 탑승구
+    tmp = find_union(parent,i) #현재 들어갈 수 있는 제일 번호가 큰 탑승구
     port[tmp] += 1
     if port[tmp] == 2: #두 대 들어왔으면 바로 break
         break
