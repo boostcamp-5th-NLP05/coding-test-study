@@ -5,25 +5,38 @@ def input():
     return sys.stdin.readline().rstrip()
 
 
+def find_parent(parent, x):
+    if parent[x] != x:
+        parent[x] = find_parent(parent, parent[x])
+    return parent[x]
+
+
+def union(parent, a, b):
+    a = find_parent(parent, a)
+    b = find_parent(parent, b)
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
+
+
 if __name__ == "__main__":
     G = int(input())
     P = int(input())
 
-    gates = [int(input()) for _ in range(P)]
+    parent = [i for i in range(G + 1)]
+    ans = 0
+    for _ in range(P):
+        g = int(input())
+        g = find_parent(parent, g)
 
-    gates.sort(key=lambda x: -x)
-
-    answer = 1
-    for idx in range(1, P):
-        # 비행기들은 들어갈 수 있는 탑승구 중 번호가 가장 큰 탑승구에 도킹한다는 가정
-        if gates[idx - 1] <= gates[idx]:
-            # 이전 비행기보다는 작은 탑승구에 들어가야 한다.
-            gates[idx] = gates[idx - 1] - 1
-
-        # 값이 0이 되었다는 뜻은 갈 수 있는 탑승구가 모두 자리가 차버렸다는 뜻
-        if gates[idx] != 0:
-            answer = idx + 1
-        else:
+        if g == 0:
             break
 
-    print(answer)
+        union(parent, g, g - 1)
+        ans += 1
+
+    for _ in range(P - ans - 1):
+        input()
+
+    print(ans)
