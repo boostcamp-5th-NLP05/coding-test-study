@@ -1,3 +1,4 @@
+# 백준 16236 정답: 33324 KB, 64ms
 import sys
 import heapq
 
