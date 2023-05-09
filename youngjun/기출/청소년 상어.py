@@ -56,19 +56,20 @@ fish_nums = [i for i in range(1,17)]
 
 def DFS(shark_r,shark_c,shark_move,fish_map,cnt):
     global answer
-    can_move = False
-    for i in range(1,4):
-        new_map = copy.deepcopy(fish_map)
-        new_cnt = cnt
+    can_move = False #해당 위치에서 움직일 수 있는 지
+    
+    for i in range(1,4): #최대 3번 움직일 수 있기 때문에
+        new_map = copy.deepcopy(fish_map) #각 움직임마다 map copy
+        new_cnt = cnt #cnt도 카피
         
         nr = shark_r + (move[shark_move][0]*i)
         nc = shark_c + (move[shark_move][1]*i)
 
-        if nr not in [0,1,2,3]:
+        if nr not in [0,1,2,3]: #범위 밖이면
             continue
         if nc not in [0,1,2,3]:
             continue
-        if new_map[nr][nc][0] not in fish_nums:
+        if new_map[nr][nc][0] not in fish_nums: #물고기가 아니면
             continue
 
         new_map = copy.deepcopy(fish_map)
