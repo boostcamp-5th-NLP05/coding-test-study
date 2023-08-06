@@ -1,41 +1,42 @@
+def time_to_sec(time):
+    a1,a2,a3 = map(int,time.split(':')) #초단위로 계산
+    return a1*3600+a2*60+a3
+
 def solution(play_time, adv_time, logs):
     if play_time == adv_time:
         return "00:00:00"
     adv1,adv2,adv3 = map(int,adv_time.split(':'))
     adv_time = adv1*3600+adv2*60+adv3
-    len_logs = len(logs)
-    for i in range(len_logs) :
-        a, b = logs[i].split('-')
-        a1,a2,a3 = map(int,a.split(':')) #초단위로 계산
-        b1,b2,b3 = map(int,b.split(':')) 
-        logs[i] = [a1*3600+a2*60+a3, b1*3600+b2*60+b3]
-    temp_cumul = 0
-    logs.sort(key = lambda x:x[0]) #시청 시작구간을 기준으로 정렬
-    for j in range(len_logs):
-        cumul = 0
-        start = logs[j][0] #공익광고 삽입 시간
-        end = logs[j][0] + adv_time #공익광고 끝나는 시간
+    time_list = [0] * time_to_sec(play_time)
+    start_end = [] # 각 광고들의 처음과 끝
 
-        for log_start, log_end in logs: #시청시간 안에 공익광고 시간만큼 누적값 더해줌
-            if start <= log_start and end >= log_start:
-                temp_st = log_start
-                temp_ed = end
-            elif start <= log_start and end >= log_end:
-                temp_st = log_start
-                temp_ed = log_end
-            elif start <= log_end and end >= log_end:
-                temp_st = start
-                temp_ed = log_end
-            elif start >= log_start and end <= log_end:
-                temp_st = start
-                temp_ed = end
-            else:
-                continue
+    for log in logs : # log들을 초단위로 변경
+        a, b = log.split('-')
+        start_end.append((time_to_sec(a), time_to_sec(b)))
+        for i in range(time_to_sec(a),time_to_sec(b)): #해당 초에 보는 시청자수 구하기
+            time_list[i] += 1
 
-            cumul += (temp_ed-temp_st) # 누적 재생시간 
-        if cumul > temp_cumul: #현재 누적재생시간보다 크면 업데이트
-            temp_cumul = cumul
-            answer = start
+    temp = sum(time_list[0:adv_time])
+    answer = 0
+
+    for s,e in start_end: # 광고의 처음과 끝을 기준으로 시청자 수 count
+        if (s + adv_time) <= time_to_sec(play_time):
+            start_sum = sum(time_list[s:s+adv_time])
+            if  temp == start_sum: # 같으면 먼저나온 광고
+                answer = min(s,answer)
+            elif  temp < start_sum:
+                answer = s
+                temp = start_sum
+
+        if (e - adv_time) >= 0:
+            end_sum = sum(time_list[e-adv_time:e])
+            if  temp == end_sum: # 같으면 먼저나온 광고
+                answer = min(e-adv_time,answer)
+            elif  temp < end_sum:
+                answer = e-adv_time
+                temp = end_sum
+
+
     h = repr(answer//3600).zfill(2)
     m = str((answer%3600)//60).zfill(2)
     s = str((answer%3600)%60).zfill(2)
