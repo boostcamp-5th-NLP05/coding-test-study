@@ -42,9 +42,15 @@ def topology_sort(n, data):
     for i in range(n):
         if indegree[i] == 0:
             q.append(i)
-
+    if not q:
+        # 시작 노드 부재
+        return "IMPOSSIBLE"
+    
     #큐가 빌 때까지 반복
     while q:
+        if len(q) > 1:
+            return "IMPOSSIBLE"
+
         #큐에서 원소 꺼내기
         now = q.popleft()
         result.append(now+1) #결과리스트에 해당 노드 순서대로 삽입
@@ -54,14 +60,18 @@ def topology_sort(n, data):
             # 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
             if indegree[i] == 0:
                 q.append(i)
-    if len(result) == n:
-        print(list(reversed(result)))
+
+    if len(result) < n: #사이클 존재하면
+        return "IMPOSSIBLE"
     else:
-        print("IMPOSSIBLE")
+        return list(reversed(result))
 
-
+answer = []
 t = int(input())
 for _ in range(t):
     n = int(input())
     data = list(map(int,input().split()))
-    topology_sort(n, data)
+    answer.append(topology_sort(n, data))
+
+for a in answer:
+    print(a)
